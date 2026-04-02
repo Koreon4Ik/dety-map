@@ -11,7 +11,7 @@ export default function LoginPage() {
   const handleLogin = (e) => {
     e.preventDefault();
     // Ми відправляємо запит до нашого маленького API
-    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD_LOCAL || password === 'твій_тимчасовий_пароль_для_тестів') {
+    if (password === process.env.NEXT_PUBLIC_ADMIN_PASSWORD_LOCAL || password === 'qwerty22') {
       localStorage.setItem('admin_auth', password);
       router.push('/admin');
     } else {
