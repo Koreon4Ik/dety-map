@@ -1,29 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Plus, Trash2, ChevronLeft, Copy, Check } from 'lucide-react';
+import { Save, Plus, Trash2, ChevronLeft, Copy, Check, Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export default function AdminPage() {
   const [locations, setLocations] = useState([]);
   const [status, setStatus] = useState('');
   const [copied, setCopied] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const router = useRouter();
 
-  // Завантажуємо поточні локації з твого locations.json
+  // Перевірка авторизації
   useEffect(() => {
-    const loadData = async () => {
-      if (typeof window !== 'undefined') {
-        try {
-          const res = await fetch('/locations.json');
-          if (res.ok) {
-            const data = await res.json();
-            setLocations(data);
-          }
-        } catch (err) {
-          console.error("Помилка завантаження файлу:", err);
-        }
-      }
-    };
-    loadData();
+    const auth = localStorage.getItem('admin_auth');
+    if (auth === process.env.NEXT_PUBLIC_ADMIN_PASSWORD) {
+      setIsAuthorized(true);
+      loadData();
+    } else {
+      router.push('/login');
+    }
   }, []);
+
+  const loadData = async () => {
+    try {
+      const res = await fetch('/locations.json');
+      if (res.ok) {
+        const data = await res.json();
+        setLocations(data);
+      }
+    } catch (err) {
+      console.error("Помилка завантаження файлу:", err);
+    }
+  };
 
   const addRow = () => {
     const newId = locations.length > 0 ? Math.max(...locations.map(l => l.id)) + 1 : 1;
@@ -52,12 +60,14 @@ export default function AdminPage() {
     const jsonString = JSON.stringify(locations, null, 2);
     navigator.clipboard.writeText(jsonString);
     setCopied(true);
-    setStatus('JSON скопійовано! Заміни вміст locations.json цим кодом.');
+    setStatus('JSON скопійовано! Заміни вміст locations.json на GitHub.');
     setTimeout(() => {
       setCopied(false);
       setStatus('');
     }, 4000);
   };
+
+  if (!isAuthorized) return <div className="min-h-screen bg-slate-950 flex items-center justify-center text-slate-500 italic uppercase font-black">Перевірка доступу...</div>;
 
   return (
     <div className="min-h-screen bg-slate-950 text-white p-4 md:p-8 font-sans">
@@ -67,7 +77,7 @@ export default function AdminPage() {
             <Link href="/" className="text-slate-500 hover:text-yellow-400 text-sm flex items-center gap-2 mb-2 transition-colors">
               <ChevronLeft size={16} /> На головну мапу
             </Link>
-            <h1 className="text-4xl font-black italic uppercase tracking-tighter text-white">Редактор Бази Даних</h1>
+            <h1 className="text-4xl font-black italic uppercase tracking-tighter text-white">Редактор Бази</h1>
           </div>
           
           <button 
@@ -92,10 +102,10 @@ export default function AdminPage() {
             <table className="w-full text-left border-collapse min-w-[800px]">
               <thead className="bg-white/5 text-[10px] uppercase font-black tracking-widest text-slate-500">
                 <tr>
-                  <th className="p-5 w-16">ID</th>
+                  <th className="p-5 w-16 text-center">ID</th>
                   <th className="p-5">Назва та Опис</th>
-                  <th className="p-5 w-48">Координати</th>
-                  <th className="p-5 w-40">Категорія</th>
+                  <th className="p-5 w-48 text-center">Координати</th>
+                  <th className="p-5 w-40 text-center">Категорія</th>
                   <th className="p-5 w-20"></th>
                 </tr>
               </thead>
@@ -108,19 +118,19 @@ export default function AdminPage() {
                         value={loc.name} 
                         onChange={(e) => updateRow(index, 'name', e.target.value)}
                         className="bg-slate-800 border border-white/5 rounded-xl px-4 py-2 w-full outline-none focus:border-yellow-400 text-sm font-bold"
-                        placeholder="Назва простору (напр. Active Hub)"
+                        placeholder="Назва"
                       />
                       <input 
                         value={loc.description} 
                         onChange={(e) => updateRow(index, 'description', e.target.value)}
                         className="bg-slate-800 border border-white/5 rounded-xl px-4 py-2 w-full outline-none focus:border-yellow-400 text-xs text-slate-400"
-                        placeholder="Короткий опис..."
+                        placeholder="Опис"
                       />
                       <input 
                         value={loc.link} 
                         onChange={(e) => updateRow(index, 'link', e.target.value)}
                         className="bg-slate-800 border border-white/5 rounded-xl px-4 py-2 w-full outline-none focus:border-yellow-400 text-[10px] text-blue-400 font-mono"
-                        placeholder="Посилання (https://...)"
+                        placeholder="Посилання"
                       />
                     </td>
                     <td className="p-4">
