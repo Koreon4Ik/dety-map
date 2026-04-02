@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Save, Image as ImageIcon, MapPin, Type, Link as LinkIcon, AlignLeft, 
-  Tag } from 'lucide-react';
+import { ChevronLeft, Clipboard, Image as ImageIcon, MapPin, Type, Link as LinkIcon, AlignLeft, Tag, X } from 'lucide-react';
 
 export default function AdminAddLocation() {
   const [formData, setFormData] = useState({
@@ -9,38 +8,35 @@ export default function AdminAddLocation() {
     category: 'МЦ',
     lat: '',
     lng: '',
-    image: '', // Нове поле для фото
+    image: '',
     description: '',
     address: '',
     link: ''
   });
 
-  const [status, setStatus] = useState('');
+  const [generatedJson, setGeneratedJson] = useState(null);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setStatus('Зберігаємо...');
+    
+    // Формуємо об'єкт так само, як він має бути в JSON
+    const newLocation = {
+      ...formData,
+      id: Date.now(),
+      lat: parseFloat(formData.lat) || 0,
+      lng: parseFloat(formData.lng) || 0
+    };
 
-    try {
-      const res = await fetch('/api/save-location', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, id: Date.now() }),
-      });
+    setGeneratedJson(JSON.stringify(newLocation, null, 2));
+  };
 
-      if (res.ok) {
-        setStatus('Успішно збережено!');
-        setFormData({ name: '', category: 'МЦ', lat: '', lng: '', image: '', description: '', address: '', link: '' });
-      } else {
-        setStatus('Помилка при збереженні');
-      }
-    } catch (err) {
-      setStatus('Помилка сервера');
-    }
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(generatedJson);
+    alert("Скопійовано! Тепер встав це у свій locations.json");
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans p-6 md:p-12">
+    <div className="min-h-screen bg-slate-950 text-white font-sans p-6 md:p-12 relative">
       <div className="max-w-4xl mx-auto">
         
         {/* HEADER */}
@@ -48,12 +44,11 @@ export default function AdminAddLocation() {
           <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-yellow-400 transition-colors uppercase font-black italic tracking-widest text-xs">
             <ChevronLeft size={20} /> Назад до мапи
           </Link>
-          <h1 className="text-3xl font-black italic uppercase tracking-tighter">Додати простір</h1>
+          <h1 className="text-3xl font-black italic uppercase tracking-tighter text-yellow-400">JSON Генератор</h1>
         </div>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-900/50 border border-white/10 p-8 md:p-12 rounded-[48px] backdrop-blur-xl shadow-2xl">
           
-          {/* НАЗВА */}
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
               <Type size={14} /> Назва закладу
@@ -61,14 +56,12 @@ export default function AdminAddLocation() {
             <input 
               required
               type="text"
-              placeholder="Наприклад: Хаб 12"
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
               value={formData.name}
               onChange={(e) => setFormData({...formData, name: e.target.value})}
             />
           </div>
 
-          {/* КАТЕГОРІЯ */}
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
               <Tag size={14} /> Категорія
@@ -84,7 +77,6 @@ export default function AdminAddLocation() {
             </select>
           </div>
 
-          {/* КООРДИНАТИ */}
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
               <MapPin size={14} /> Широта (Lat)
@@ -113,36 +105,24 @@ export default function AdminAddLocation() {
             />
           </div>
 
-          {/* ФОТО (НОВЕ ПОЛЕ) */}
           <div className="md:col-span-2 space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
               <ImageIcon size={14} /> Посилання на фото (URL)
             </label>
-            <div className="relative">
-              <input 
-                type="text"
-                placeholder="https://images.unsplash.com/..."
-                className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 pr-24 outline-none focus:border-yellow-400 transition-all font-bold"
-                value={formData.image}
-                onChange={(e) => setFormData({...formData, image: e.target.value})}
-              />
-              {formData.image && (
-                <div className="absolute right-2 top-2 h-10 w-16 rounded-lg overflow-hidden border border-white/10">
-                  <img src={formData.image} className="w-full h-full object-cover" alt="Прев'ю" />
-                </div>
-              )}
-            </div>
-            <p className="text-[9px] text-slate-600 uppercase font-bold tracking-widest italic">Пряме посилання на картинку (jpg, png або unsplash)</p>
+            <input 
+              type="text"
+              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
+              value={formData.image}
+              onChange={(e) => setFormData({...formData, image: e.target.value})}
+            />
           </div>
 
-          {/* АДРЕСА ТА САЙТ */}
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
               <MapPin size={14} /> Адреса
             </label>
             <input 
               type="text"
-              placeholder="вул. Центральна, 1"
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
               value={formData.address}
               onChange={(e) => setFormData({...formData, address: e.target.value})}
@@ -151,44 +131,59 @@ export default function AdminAddLocation() {
 
           <div className="space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <LinkIcon size={14} /> Посилання на сайт/Instagram
+              <LinkIcon size={14} /> Сайт/Instagram
             </label>
             <input 
               type="text"
-              placeholder="https://..."
               className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
               value={formData.link}
               onChange={(e) => setFormData({...formData, link: e.target.value})}
             />
           </div>
 
-          {/* ОПИС */}
           <div className="md:col-span-2 space-y-2">
             <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <AlignLeft size={14} /> Опис простору
+              <AlignLeft size={14} /> Опис
             </label>
             <textarea 
-              rows="4"
-              placeholder="Розкажіть про можливості закладу..."
-              className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 outline-none focus:border-yellow-400 transition-all font-medium leading-relaxed resize-none"
+              rows="3"
+              className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 outline-none focus:border-yellow-400 transition-all font-medium resize-none"
               value={formData.description}
               onChange={(e) => setFormData({...formData, description: e.target.value})}
             />
           </div>
 
-          {/* КНОПКА ЗБЕРЕЖЕННЯ */}
           <div className="md:col-span-2 pt-4">
             <button 
               type="submit"
-              className="w-full bg-yellow-400 text-black py-6 rounded-[32px] font-black uppercase italic tracking-widest flex items-center justify-center gap-3 hover:bg-white transition-all shadow-2xl shadow-yellow-400/20 active:scale-95"
+              className="w-full bg-yellow-400 text-black py-6 rounded-[32px] font-black uppercase italic tracking-widest flex items-center justify-center gap-3 hover:bg-white transition-all shadow-2xl active:scale-95"
             >
-              <Save size={24} /> {status || 'Зберегти локацію'}
+              Згенерувати код для JSON
             </button>
           </div>
-
         </form>
       </div>
+
+      {/* МОДАЛЬНЕ ВІКНО З ГОТОВИМ КОДОМ */}
+      {generatedJson && (
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md">
+          <div className="bg-slate-900 border border-white/10 rounded-[40px] p-8 max-w-2xl w-full shadow-2xl relative">
+            <button onClick={() => setGeneratedJson(null)} className="absolute top-6 right-6 text-slate-500 hover:text-white">
+              <X size={24} />
+            </button>
+            <h2 className="text-xl font-black uppercase italic mb-4 text-yellow-400">Готово! Скопіюй цей блок:</h2>
+            <pre className="bg-black/50 p-6 rounded-2xl overflow-x-auto text-xs text-green-400 font-mono mb-6 border border-white/5">
+              {generatedJson}
+            </pre>
+            <button 
+              onClick={copyToClipboard}
+              className="w-full bg-white text-black py-4 rounded-2xl font-black uppercase flex items-center justify-center gap-2 hover:bg-yellow-400 transition-all"
+            >
+              <Clipboard size={20} /> Скопіювати код
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
-
