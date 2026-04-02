@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Save, Image as ImageIcon, MapPin, Type, Link as LinkIcon, AlignLeft } from 'lucide-react';
+import { ChevronLeft, Save, Image as ImageIcon, MapPin, Type, Link as LinkIcon, AlignLeft, 
+  Tag } from 'lucide-react';
 
 export default function AdminAddLocation() {
   const [formData, setFormData] = useState({
@@ -191,7 +192,3 @@ export default function AdminAddLocation() {
   );
 }
 
-// Допоміжний компонент іконки тега (який я забув імпортувати зверху)
-function Tag({ size, className }) {
-  return <path className={className} size={size} />; 
-}
