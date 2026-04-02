@@ -57,7 +57,7 @@ export default function Home() {
           <div className="flex items-center gap-3 bg-slate-900/90 backdrop-blur-xl border border-white/10 p-2 pr-4 rounded-3xl shadow-2xl animate-fade-in">
             <div className="w-10 h-10 rounded-2xl overflow-hidden flex items-center justify-center bg-white/5 animate-pulse-slow">
               <img 
-                src="/img/logo.png" 
+                src="/img/logo.PNG" 
                 alt="Logo" 
                 className="w-full h-full object-cover"
                 onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=D&background=fbbf24&color=000"; }}
