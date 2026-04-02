@@ -22,7 +22,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
 
   // ПРАВИЛЬНЕ ПОСИЛАННЯ (Експорт у CSV)
-  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZqWD6c503b_HX2dun4KRAts4pp91luuKhCqrtDHj6ZiNglDftZamtij6PKDOXFlmUUksUs5hQm-M2/pub?output=tsvhttps://docs.google.com/spreadsheets/d/e/2PACX-1vSZqWD6c503b_HX2dun4KRAts4pp91luuKhCqrtDHj6ZiNglDftZamtij6PKDOXFlmUUksUs5hQm-M2/pub?output=csv"; 
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZqWD6c503b_HX2dun4KRAts4pp91luuKhCqrtDHj6ZiNglDftZamtij6PKDOXFlmUUksUs5hQm-M2/pub?output=csv"; 
   // Примітка: Тобі треба натиснути "Файл" -> "Поділитися" -> "Опублікувати в інтернеті" -> обрати "CSV"
 
   const categories = ['Всі', 'МЦ', 'NGO', 'Освіта', 'Коворкінг', 'Волонтерство', 'Спорт', 'Культура'];
