@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Plus, Search, Settings, Info, X, Map as MapIcon } from 'lucide-react';
+import { Plus, Search, Settings, Info, X, MapPin } from 'lucide-react';
 
+// Динамічний імпорт мапи (SSR: false для Leaflet)
 const MapCustom = dynamic(() => import('../components/Map'), { 
   ssr: false,
   loading: () => <div className="h-screen w-full bg-slate-950 flex items-center justify-center text-slate-500 font-black italic uppercase tracking-tighter">Завантаження...</div>
@@ -16,6 +17,7 @@ export default function Home() {
   const [isAboutOpen, setIsAboutOpen] = useState(false);
   const router = useRouter();
 
+  // Завантаження точок з public/locations.json
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -29,6 +31,7 @@ export default function Home() {
     fetchData();
   }, []);
 
+  // Фільтрація та пошук
   const filteredData = data.filter(item => {
     const matchesFilter = filter === 'ВСІ' || item.category === filter;
     const matchesSearch = item.name.toLowerCase().includes(search.toLowerCase());
@@ -38,95 +41,105 @@ export default function Home() {
   return (
     <div className="h-screen w-full bg-slate-950 relative overflow-hidden font-sans text-white">
       
-      {/* --- HEADER --- */}
-      <div className="absolute top-6 left-0 right-0 z-[1000] px-6">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row gap-4 items-start md:items-center">
+      {/* --- ВЕРХНЯ ПАНЕЛЬ (HEADER) --- */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-[1500px] flex flex-col md:flex-row gap-5 items-start md:items-center">
+        
+        {/* МАКСИМАЛЬНО ЗБІЛЬШЕНИЙ БЛОК ЛОГОТИПУ ТА ПРО НАС */}
+        <div className="flex items-center gap-5 bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-4 pr-7 rounded-[40px] shadow-2xl animate-fade-in shrink-0">
           
-          {/* ЗБІЛЬШЕНИЙ БЛОК ЛОГОТИПУ */}
-          <div className="flex items-center gap-4 bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-3 pr-6 rounded-[32px] shadow-2xl animate-fade-in shrink-0">
-            <div className="w-16 h-16 rounded-[24px] overflow-hidden flex items-center justify-center bg-yellow-400 p-0.5 shadow-lg shadow-yellow-400/20 animate-pulse-slow">
-              <img 
-                src="/img/logo.png" 
-                alt="Logo" 
-                className="w-full h-full object-cover rounded-[22px]"
-                onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=D&background=fbbf24&color=000"; }}
-              />
-            </div>
-            <div className="flex flex-col">
-              <h1 className="text-xl font-black italic uppercase tracking-tighter leading-none mb-1">DETY MAP</h1>
-              <button 
-                onClick={() => setIsAboutOpen(true)}
-                className="flex items-center gap-1.5 text-yellow-400 text-[10px] font-black uppercase tracking-widest hover:text-white transition-colors w-fit"
-              >
-                <div className="w-2 h-2 bg-yellow-400 rounded-full animate-ping"></div>
-                Про нас
-              </button>
-            </div>
+          {/* ВЕЛИКИЙ КОНТЕЙНЕР ДЛЯ КАРТИНКИ (LOGO) */}
+          <div className="w-20 h-20 rounded-[30px] overflow-hidden flex items-center justify-center bg-yellow-400 p-0.5 shadow-2xl shadow-yellow-400/20 animate-pulse-slow">
+            <img 
+              src="/img/logo.PNG" 
+              alt="Logo" 
+              className="w-full h-full object-cover rounded-[28px]"
+              onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=D&background=fbbf24&color=000&size=128"; }}
+            />
           </div>
+          
+          <div className="flex flex-col gap-1.5">
+            <h1 className="text-3xl font-black italic uppercase tracking-tighter leading-none mb-1 text-white">DETY MAP</h1>
+            <button 
+              onClick={() => setIsAboutOpen(true)}
+              className="flex items-center gap-2 text-yellow-400 text-[11px] font-black uppercase tracking-[0.2em] hover:text-white transition-colors w-fit group"
+            >
+              <div className="relative flex h-3 w-3 items-center justify-center">
+                <div className="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75 group-hover:bg-white"></div>
+                <div className="relative inline-flex h-2.5 w-2.5 rounded-full bg-yellow-500"></div>
+              </div>
+              Про нас
+            </button>
+          </div>
+        </div>
 
-          {/* ПОШУК ТА ФІЛЬТРИ */}
-          <div className="bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-2.5 rounded-[32px] flex flex-grow items-center gap-3 shadow-2xl w-full">
-            <div className="flex items-center gap-3 bg-white/5 rounded-2xl px-5 py-3 flex-grow border border-white/5 focus-within:border-yellow-400/50 transition-all">
-              <Search size={20} className="text-slate-500" />
-              <input 
-                type="text"
-                placeholder="Пошук простору..."
-                className="bg-transparent outline-none w-full text-base font-bold text-white placeholder:text-slate-600"
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
-            
-            <div className="hidden lg:flex gap-1.5 pr-2">
-              {['ВСІ', 'МЦ', 'NGO', 'ОСВІТА', 'КОВОРКІНГ', 'СПОРТ', 'КУЛЬТУРА'].map(cat => (
-                <button
-                  key={cat}
-                  onClick={() => setFilter(cat)}
-                  className={`px-5 py-3 rounded-2xl text-[11px] font-black uppercase transition-all whitespace-nowrap tracking-wider ${
-                    filter === cat 
-                      ? 'bg-yellow-400 text-black shadow-xl shadow-yellow-400/30 scale-105' 
-                      : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
-                  }`}
-                >
-                  {cat}
-                </button>
-              ))}
-            </div>
+        {/* БЛОК ПОШУКУ ТА ФІЛЬТРИ (залишаємо, але трохи збільшуємо) */}
+        <div className="bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-3 rounded-[32px] flex flex-grow items-center gap-3 shadow-2xl w-full">
+          <div className="flex items-center gap-4 bg-white/5 rounded-3xl px-6 py-4 flex-grow border border-white/5 focus-within:border-yellow-400/50 transition-all">
+            <Search size={22} className="text-slate-500" />
+            <input 
+              type="text"
+              placeholder="Знайти коворкінг, молодіжний центр..."
+              className="bg-transparent outline-none w-full text-base font-bold text-white placeholder:text-slate-600"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          
+          <div className="hidden lg:flex gap-1.5 pr-2 no-scrollbar overflow-x-auto max-w-[500px]">
+            {['ВСІ', 'МЦ', 'NGO', 'ОСВІТА', 'КОВОРКІНГ', 'СПОРТ'].map(cat => (
+              <button
+                key={cat}
+                onClick={() => setFilter(cat)}
+                className={`px-5 py-3.5 rounded-2xl text-[11px] font-black uppercase transition-all whitespace-nowrap tracking-wider active:scale-95 ${
+                  filter === cat 
+                    ? 'bg-yellow-400 text-black shadow-xl shadow-yellow-400/30' 
+                    : 'bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white'
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
-      {/* MODAL ABOUT */}
+      {/* --- МОДАЛЬНЕ ВІКНО "ПРО НАС" --- */}
       {isAboutOpen && (
         <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-xl animate-fade-in">
-          <div className="bg-slate-900 border border-white/10 rounded-[48px] p-10 md:p-16 max-w-3xl w-full relative shadow-2xl">
+          <div className="bg-slate-900 border border-white/10 rounded-[56px] p-12 md:p-16 max-w-4xl w-full relative shadow-2xl shadow-black/70 relative overflow-hidden">
+            {/* Декор на фоні модалки */}
+            <div className="absolute -top-32 -left-32 w-64 h-64 bg-yellow-400/5 rounded-full blur-3xl"></div>
+            <div className="absolute -bottom-32 -right-32 w-64 h-64 bg-yellow-400/5 rounded-full blur-3xl"></div>
+
             <button 
               onClick={() => setIsAboutOpen(false)}
-              className="absolute top-8 right-8 p-3 bg-white/5 rounded-full hover:bg-white/10 transition-all text-slate-400 hover:text-white"
+              className="absolute top-8 right-8 p-3.5 bg-white/5 rounded-full hover:bg-white/10 transition-all text-slate-400 hover:text-white z-10"
             >
               <X size={28} />
             </button>
             
-            <div className="flex items-center gap-6 mb-10">
-               <div className="w-24 h-24 bg-yellow-400 rounded-[32px] p-1 shadow-2xl shadow-yellow-400/20 flex items-center justify-center overflow-hidden shrink-0">
-                  <img src="/img/logo.png" className="w-full h-full object-cover rounded-[28px]" alt="Large Logo" />
+            <div className="flex flex-col md:flex-row items-center gap-8 mb-12 relative z-10">
+               <div className="w-32 h-32 bg-yellow-400 rounded-[40px] p-1.5 shadow-2xl shadow-yellow-400/20 flex items-center justify-center overflow-hidden shrink-0 animate-pulse-slow">
+                  <img src="/img/logo.png" className="w-full h-full object-cover rounded-[36px]" alt="Large Logo" />
                </div>
                <div>
-                  <span className="text-yellow-400 font-black uppercase italic tracking-[0.3em] text-xs">Про проект</span>
-                  <h2 className="text-5xl font-black italic uppercase tracking-tighter mt-1 leading-none">DETY MAP</h2>
+                  <span className="text-yellow-400 font-black uppercase italic tracking-[0.4em] text-xs">Про проект</span>
+                  <h2 className="text-6xl font-black italic uppercase tracking-tighter mt-1 leading-none text-white">DETY MAP</h2>
+                  <p className="text-slate-400 text-base mt-2 flex items-center gap-2"><MapPin size={16} /> Карта активних просторів твого міста</p>
                </div>
             </div>
             
-            <div className="text-slate-400 space-y-6 leading-relaxed text-xl font-medium">
-              <p>Ми створили цю мапу, щоб кожен молодий активіст міг знайти своє місце сили у Дніпрі.</p>
-              <p>Тут зібрані молодіжні центри, хаби, громадські простори та коворкінги, де можна навчатися, працювати та створювати майбутнє.</p>
-              <div className="pt-8 border-t border-white/5 flex flex-col md:flex-row gap-6">
-                <div className="flex-1">
-                   <h4 className="text-white font-black uppercase italic text-sm mb-2 underline decoration-yellow-400 underline-offset-4">Для кого?</h4>
-                   <p className="text-sm">Студенти, волонтери, активісти та всі, хто хоче розвиватись.</p>
+            <div className="text-slate-400 space-y-6 leading-relaxed text-xl font-medium relative z-10 max-w-3xl">
+              <p>DETY MAP — це проект для молодих та активних, хто шукає своє місце сили. Ми зібрали всі круті локації твого міста на одній інтерактивній мапі.</p>
+              <p>Тут ти знайдеш <strong className="text-white">молодіжні центри, громадські організації, коворкінги та хаби</strong>, де можна навчатися, працювати над власними проектами та знаходити однодумців.</p>
+              
+              <div className="pt-10 mt-10 border-t border-white/10 flex flex-col md:flex-row gap-8">
+                <div className="bg-white/5 p-6 rounded-3xl flex-1 border border-white/5">
+                   <h4 className="text-yellow-400 font-black uppercase italic text-sm mb-2">Для кого?</h4>
+                   <p className="text-slate-300 text-base">Студенти, волонтери, стартапери та всі, хто хоче розвиватися та діяти.</p>
                 </div>
-                <div className="flex-1">
-                   <h4 className="text-white font-black uppercase italic text-sm mb-2 underline decoration-yellow-400 underline-offset-4">Як допомогти?</h4>
-                   <p className="text-sm">Тисни на "+" у кутку мапи та додавай нові круті локації.</p>
+                <div className="bg-white/5 p-6 rounded-3xl flex-1 border border-white/5">
+                   <h4 className="text-yellow-400 font-black uppercase italic text-sm mb-2">Як допомогти?</h4>
+                   <p className="text-slate-300 text-base">Тисни на "+" у кутку мапи та пропонуй нові локації для нашої бази даних.</p>
                 </div>
               </div>
             </div>
@@ -134,33 +147,35 @@ export default function Home() {
         </div>
       )}
 
-      {/* MAP */}
+      {/* --- МАПА --- */}
       <div className="h-full w-full">
         <MapCustom points={filteredData} onPointClick={(loc) => router.push(`/location/${loc.id}`)} />
       </div>
 
-      {/* FLOATING ACTIONS */}
+      {/* --- ПЛАВАЮЧІ КНОПКИ КЕРУВАННЯ --- */}
       <div className="absolute bottom-10 right-10 z-[1000] flex flex-col gap-5">
         <Link href="/login" className="bg-slate-900 border border-white/10 text-white p-5 rounded-3xl hover:bg-white hover:text-black transition-all shadow-2xl group flex items-center justify-center">
           <Settings size={28} className="group-hover:rotate-180 transition-transform duration-700" />
         </Link>
-        <Link href="/add" className="bg-yellow-400 text-black p-6 rounded-[32px] hover:scale-110 hover:-rotate-3 transition-all shadow-2xl shadow-yellow-400/30 flex items-center justify-center group">
-          <Plus size={40} strokeWidth={3} className="group-hover:rotate-90 transition-transform" />
+        <Link href="/add" className="bg-yellow-400 text-black p-6 rounded-[32px] hover:scale-110 hover:-rotate-3 transition-all shadow-2xl shadow-yellow-400/30 flex items-center justify-center group active:scale-95">
+          <Plus size={40} strokeWidth={4} className="group-hover:rotate-90 transition-transform" />
         </Link>
       </div>
 
+      {/* --- ГЛОБАЛЬНІ СТИЛІ АНІМАЦІЙ --- */}
       <style jsx global>{`
         @keyframes fade-in {
-          from { opacity: 0; transform: translateY(-20px); }
+          from { opacity: 0; transform: translateY(-30px); }
           to { opacity: 1; transform: translateY(0); }
         }
         @keyframes pulse-slow {
-          0%, 100% { transform: scale(1); filter: brightness(1); }
-          50% { transform: scale(0.98); filter: brightness(1.1); }
+          0%, 100% { transform: scale(1); filter: brightness(1) contrast(1); }
+          50% { transform: scale(0.97); filter: brightness(1.1) contrast(1.05); }
         }
-        .animate-fade-in { animation: fade-in 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards; }
+        .animate-fade-in { animation: fade-in 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
         .animate-pulse-slow { animation: pulse-slow 5s infinite ease-in-out; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
+        body { margin: 0; padding: 0; overflow: hidden; background: #020617; }
       `}</style>
     </div>
   );
