@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
-import { Search, X, Crosshair, Plus, MapPin, Info } from 'lucide-react';
+import { Search, X, Plus, MapPin, Info } from 'lucide-react';
 import Papa from 'papaparse';
 
-// Динамічний імпорт карти, щоб не було помилок на сервері
+// Динамічний імпорт карти
 const Map = dynamic(() => import('../components/Map'), { 
   ssr: false,
   loading: () => (
@@ -21,8 +21,9 @@ export default function Home() {
   const [selectedPoint, setSelectedPoint] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // ПОСИЛАННЯ НА ТВОЮ ТАБЛИЦЮ (CSV)
-  const csvUrl = "https://docs.google.com/spreadsheets/d/1QQ--ksesf-QWv79A1bs1sfUvL6aMishewSdS5jJMmI8/edit?usp=sharing"; 
+  // ПРАВИЛЬНЕ ПОСИЛАННЯ (Експорт у CSV)
+  const csvUrl = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSZqWD6c503b_HX2dun4KRAts4pp91luuKhCqrtDHj6ZiNglDftZamtij6PKDOXFlmUUksUs5hQm-M2/pub?output=tsvhttps://docs.google.com/spreadsheets/d/e/2PACX-1vSZqWD6c503b_HX2dun4KRAts4pp91luuKhCqrtDHj6ZiNglDftZamtij6PKDOXFlmUUksUs5hQm-M2/pub?output=csv"; 
+  // Примітка: Тобі треба натиснути "Файл" -> "Поділитися" -> "Опублікувати в інтернеті" -> обрати "CSV"
 
   const categories = ['Всі', 'МЦ', 'NGO', 'Освіта', 'Коворкінг', 'Волонтерство', 'Спорт', 'Культура'];
 
@@ -37,14 +38,16 @@ export default function Home() {
           header: true,
           skipEmptyLines: true,
           complete: (results) => {
-            const points = results.data.map((item, index) => ({
-              id: index,
-              name: item.name || "Без назви",
-              category: item.category || "Інше",
-              description: item.description || "",
-              lat: parseFloat(item.lat),
-              lng: parseFloat(item.lng)
-            })).filter(p => !isNaN(p.lat) && !isNaN(p.lng));
+            const points = results.data
+              .map((item, index) => ({
+                id: index,
+                name: item.name || "Без назви",
+                category: item.category || "Інше",
+                description: item.description || "",
+                lat: parseFloat(item.lat),
+                lng: parseFloat(item.lng)
+              }))
+              .filter(p => !isNaN(p.lat) && !isNaN(p.lng)); // Відсікаємо некоректні координати
             
             setData(points);
             setIsLoading(false);
@@ -59,7 +62,6 @@ export default function Home() {
     fetchData();
   }, [csvUrl]);
 
-  // Логіка фільтрації
   const filteredData = useMemo(() => {
     return data.filter(item => {
       const matchesFilter = filter === 'Всі' || item.category === filter;
@@ -71,7 +73,7 @@ export default function Home() {
   return (
     <div className="h-screen w-full bg-slate-950 flex flex-col font-sans overflow-hidden text-white relative">
       
-      {/* ВЕРХНЯ ПАНЕЛЬ: ПОШУК ТА ФІЛЬТРИ */}
+      {/* ВЕРХНЯ ПАНЕЛЬ */}
       <nav className="absolute top-6 left-1/2 -translate-x-1/2 z-[1001] w-[92%] max-w-5xl">
         <div className="bg-slate-900/90 backdrop-blur-2xl border border-white/10 p-3 rounded-[32px] shadow-2xl flex flex-col md:flex-row gap-4 px-6">
           <div className="relative flex-1">
@@ -108,8 +110,7 @@ export default function Home() {
           <Map points={filteredData} onPointClick={setSelectedPoint} />
         )}
         
-        {/* КНОПКИ ПРАВОРУЧ */}
-        <div className="absolute bottom-10 right-6 z-[1001] flex flex-col gap-4">
+        <div className="absolute bottom-10 right-6 z-[1001]">
           <Link href="/add" className="w-16 h-16 bg-yellow-400 text-black rounded-[24px] flex items-center justify-center shadow-2xl active:scale-95 transition-all hover:rotate-90">
             <Plus size={32} strokeWidth={3} />
           </Link>
@@ -125,11 +126,9 @@ export default function Home() {
               <X size={18} />
             </button>
             
-            <div className="flex items-center gap-2 mb-4">
-              <span className="bg-yellow-400 text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic">
-                {selectedPoint.category}
-              </span>
-            </div>
+            <span className="bg-yellow-400 text-black text-[9px] font-black px-3 py-1 rounded-full uppercase italic mb-4 inline-block">
+              {selectedPoint.category}
+            </span>
 
             <h2 className="text-3xl font-black text-white italic uppercase leading-none tracking-tighter">
               {selectedPoint.name}
@@ -139,10 +138,8 @@ export default function Home() {
               {selectedPoint.description}
             </p>
 
-            <div className="mt-8 flex items-center gap-4">
-               <div className="flex items-center gap-1 text-slate-500 text-[10px] font-mono">
-                  <MapPin size={14} className="text-yellow-400" /> {selectedPoint.lat.toFixed(3)}, {selectedPoint.lng.toFixed(3)}
-               </div>
+            <div className="mt-8 flex items-center gap-1 text-slate-500 text-[10px] font-mono">
+              <MapPin size={14} className="text-yellow-400" /> {selectedPoint.lat.toFixed(3)}, {selectedPoint.lng.toFixed(3)}
             </div>
 
             <button className="mt-8 w-full bg-white text-black font-black py-5 rounded-[24px] text-center text-[10px] uppercase italic hover:bg-yellow-400 transition-all active:scale-95 flex items-center justify-center gap-2">
