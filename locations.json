@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Молодіжний центр 'Space'",
+    "lat": 50.4501,
+    "lng": 30.5234,
+    "category": "МЦ",
+    "description": "Крутий простір для лекцій та нетворкінгу.",
+    "link": "https://instagram.com/example"
+  },
+  {
+    "id": 2,
+    "name": "Active Hub",
+    "lat": 49.8397,
+    "lng": 24.0297,
+    "category": "NGO",
+    "description": "Волонтерський штаб та коворкінг.",
+    "link": "https://facebook.com/example"
+  },
+  {
+    "id": 3,
+    "name": "Skill-Up Academy",
+    "lat": 48.4647,
+    "lng": 35.0462,
+    "category": "Освіта",
+    "description": "Безкоштовні курси програмування та дизайну.",
+    "link": "#"
+  },
+  {
+    "id": 4,
+    "name": "Unity Coworking",
+    "lat": 46.4825,
+    "lng": 30.7233,
+    "category": "Коворкінг",
+    "description": "Безпечне місце з генераторами для навчання.",
+    "link": "#"
+  }
+]
