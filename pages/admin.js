@@ -1,189 +1,210 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { ChevronLeft, Clipboard, Image as ImageIcon, MapPin, Type, Link as LinkIcon, AlignLeft, Tag, X } from 'lucide-react';
+import { ChevronLeft, Clipboard, Trash2, Plus, Save, Image as ImageIcon, MapPin, Type, Link as LinkIcon, Tag, X, Edit3 } from 'lucide-react';
 
-export default function AdminAddLocation() {
-  const [formData, setFormData] = useState({
-    name: '',
-    category: 'МЦ',
-    lat: '',
-    lng: '',
-    image: '',
-    description: '',
-    address: '',
-    link: ''
-  });
+export default function AdminEditor() {
+  const [locations, setLocations] = useState([]);
+  const [editingId, setEditingId] = useState(null);
+  const [showExport, setShowExport] = useState(false);
 
-  const [generatedJson, setGeneratedJson] = useState(null);
+  // 1. Завантажуємо поточні дані при вході
+  useEffect(() => {
+    fetch('/locations.json')
+      .then(res => res.json())
+      .then(data => setLocations(data))
+      .catch(err => console.error("Помилка завантаження:", err));
+  }, []);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    
-    // Формуємо об'єкт так само, як він має бути в JSON
-    const newLocation = {
-      ...formData,
+  // 2. Функція для додавання нової порожньої мітки
+  const addNewLocation = () => {
+    const newLoc = {
       id: Date.now(),
-      lat: parseFloat(formData.lat) || 0,
-      lng: parseFloat(formData.lng) || 0
+      name: "Нова локація",
+      category: "МЦ",
+      lat: 48.46,
+      lng: 35.04,
+      image: "",
+      description: "",
+      address: "",
+      link: ""
     };
-
-    setGeneratedJson(JSON.stringify(newLocation, null, 2));
+    setLocations([newLoc, ...locations]);
+    setEditingId(newLoc.id); // Одразу відкриваємо редагування
   };
 
-  const copyToClipboard = () => {
-    navigator.clipboard.writeText(generatedJson);
-    alert("Скопійовано! Тепер встав це у свій locations.json");
+  // 3. Оновлення даних у масиві
+  const updateLocation = (id, field, value) => {
+    setLocations(locations.map(loc => 
+      loc.id === id ? { ...loc, [field]: value } : loc
+    ));
+  };
+
+  // 4. Видалення
+  const deleteLocation = (id) => {
+    if (confirm("Видалити цю мітку?")) {
+      setLocations(locations.filter(loc => loc.id !== id));
+    }
+  };
+
+  const copyFullJson = () => {
+    // Перетворюємо координати в числа перед копіюванням
+    const cleanedData = locations.map(loc => ({
+      ...loc,
+      lat: parseFloat(loc.lat),
+      lng: parseFloat(loc.lng)
+    }));
+    navigator.clipboard.writeText(JSON.stringify(cleanedData, null, 2));
+    alert("Весь код скопійовано! Встав його в locations.json");
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white font-sans p-6 md:p-12 relative">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-slate-950 text-white font-sans p-6 md:p-12">
+      <div className="max-w-6xl mx-auto">
         
         {/* HEADER */}
-        <div className="flex items-center justify-between mb-12">
-          <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-yellow-400 transition-colors uppercase font-black italic tracking-widest text-xs">
-            <ChevronLeft size={20} /> Назад до мапи
-          </Link>
-          <h1 className="text-3xl font-black italic uppercase tracking-tighter text-yellow-400">JSON Генератор</h1>
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-12">
+          <div>
+            <Link href="/" className="flex items-center gap-2 text-slate-500 hover:text-yellow-400 transition-all uppercase font-black italic tracking-widest text-[10px] mb-4">
+              <ChevronLeft size={16} /> Назад до мапи
+            </Link>
+            <h1 className="text-4xl font-black italic uppercase tracking-tighter text-white">Редактор Бази Даних</h1>
+          </div>
+          
+          <div className="flex gap-4 w-full md:w-auto">
+            <button 
+              onClick={addNewLocation}
+              className="flex-1 md:flex-none bg-blue-600 hover:bg-blue-500 text-white px-6 py-4 rounded-2xl font-black uppercase italic text-sm flex items-center justify-center gap-2 transition-all shadow-xl shadow-blue-900/20"
+            >
+              <Plus size={20} /> Додати нову
+            </button>
+            <button 
+              onClick={() => setShowExport(true)}
+              className="flex-1 md:flex-none bg-yellow-400 hover:bg-white text-black px-8 py-4 rounded-2xl font-black uppercase italic text-sm flex items-center justify-center gap-2 transition-all shadow-xl shadow-yellow-400/20"
+            >
+              <Save size={20} /> Отримати код файлу
+            </button>
+          </div>
         </div>
 
-        <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-8 bg-slate-900/50 border border-white/10 p-8 md:p-12 rounded-[48px] backdrop-blur-xl shadow-2xl">
-          
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <Type size={14} /> Назва закладу
-            </label>
-            <input 
-              required
-              type="text"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-            />
-          </div>
+        {/* LIST OF LOCATIONS */}
+        <div className="grid grid-cols-1 gap-4">
+          {locations.map((loc) => (
+            <div key={loc.id} className={`bg-slate-900/50 border ${editingId === loc.id ? 'border-yellow-400 shadow-yellow-400/10' : 'border-white/5'} rounded-[32px] p-6 transition-all`}>
+              
+              {/* Рядок заголовку (завжди видимий) */}
+              <div className="flex items-center justify-between gap-4">
+                <div className="flex items-center gap-4 truncate">
+                  <div className="w-12 h-12 rounded-xl bg-slate-800 overflow-hidden shrink-0 border border-white/10">
+                    <img src={loc.image || "https://ui-avatars.com/api/?name=?"} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="truncate">
+                    <h3 className="font-black uppercase italic text-lg truncate leading-tight">{loc.name || "Без назви"}</h3>
+                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{loc.category} • {loc.address || "Адреса не вказана"}</span>
+                  </div>
+                </div>
+                
+                <div className="flex gap-2 shrink-0">
+                  <button 
+                    onClick={() => setEditingId(editingId === loc.id ? null : loc.id)}
+                    className={`p-3 rounded-xl transition-all ${editingId === loc.id ? 'bg-yellow-400 text-black' : 'bg-white/5 text-white hover:bg-white/10'}`}
+                  >
+                    {editingId === loc.id ? <X size={20} /> : <Edit3 size={20} />}
+                  </button>
+                  <button onClick={() => deleteLocation(loc.id)} className="p-3 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-xl transition-all">
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <Tag size={14} /> Категорія
-            </label>
-            <select 
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold appearance-none cursor-pointer"
-              value={formData.category}
-              onChange={(e) => setFormData({...formData, category: e.target.value})}
-            >
-              {['МЦ', 'NGO', 'ОСВІТА', 'КОВОРКІНГ', 'СПОРТ', 'КУЛЬТУРА', 'ВОЛОНТЕРСТВО'].map(c => (
-                <option key={c} value={c} className="bg-slate-900">{c}</option>
-              ))}
-            </select>
-          </div>
+              {/* ФОРМА РЕДАГУВАННЯ (розгортається) */}
+              {editingId === loc.id && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 pt-8 border-t border-white/5 animate-fade-in">
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Назва</label>
+                      <input type="text" value={loc.name} onChange={(e) => updateLocation(loc.id, 'name', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold" />
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                       <div>
+                        <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Категорія</label>
+                        <select value={loc.category} onChange={(e) => updateLocation(loc.id, 'category', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold appearance-none">
+                          {['МЦ', 'NGO', 'ОСВІТА', 'КОВОРКІНГ', 'СПОРТ', 'КУЛЬТУРА', 'ВОЛОНТЕРСТВО'].map(c => <option key={c} value={c}>{c}</option>)}
+                        </select>
+                      </div>
+                      <div>
+                        <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Адреса</label>
+                        <input type="text" value={loc.address} onChange={(e) => updateLocation(loc.id, 'address', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold" />
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Широта (Lat)</label>
+                        <input type="number" step="any" value={loc.lat} onChange={(e) => updateLocation(loc.id, 'lat', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold font-mono" />
+                      </div>
+                      <div>
+                        <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Довгота (Lng)</label>
+                        <input type="number" step="any" value={loc.lng} onChange={(e) => updateLocation(loc.id, 'lng', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold font-mono" />
+                      </div>
+                    </div>
+                  </div>
 
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <MapPin size={14} /> Широта (Lat)
-            </label>
-            <input 
-              required
-              type="text"
-              placeholder="48.46..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.lat}
-              onChange={(e) => setFormData({...formData, lat: e.target.value})}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <MapPin size={14} /> Довгота (Lng)
-            </label>
-            <input 
-              required
-              type="text"
-              placeholder="35.04..."
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.lng}
-              onChange={(e) => setFormData({...formData, lng: e.target.value})}
-            />
-          </div>
-
-          <div className="md:col-span-2 space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <ImageIcon size={14} /> Посилання на фото (URL)
-            </label>
-            <input 
-              type="text"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.image}
-              onChange={(e) => setFormData({...formData, image: e.target.value})}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <MapPin size={14} /> Адреса
-            </label>
-            <input 
-              type="text"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.address}
-              onChange={(e) => setFormData({...formData, address: e.target.value})}
-            />
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <LinkIcon size={14} /> Сайт/Instagram
-            </label>
-            <input 
-              type="text"
-              className="w-full bg-white/5 border border-white/10 rounded-2xl p-4 outline-none focus:border-yellow-400 transition-all font-bold"
-              value={formData.link}
-              onChange={(e) => setFormData({...formData, link: e.target.value})}
-            />
-          </div>
-
-          <div className="md:col-span-2 space-y-2">
-            <label className="text-[10px] font-black uppercase tracking-[0.2em] text-slate-500 flex items-center gap-2">
-              <AlignLeft size={14} /> Опис
-            </label>
-            <textarea 
-              rows="3"
-              className="w-full bg-white/5 border border-white/10 rounded-3xl p-6 outline-none focus:border-yellow-400 transition-all font-medium resize-none"
-              value={formData.description}
-              onChange={(e) => setFormData({...formData, description: e.target.value})}
-            />
-          </div>
-
-          <div className="md:col-span-2 pt-4">
-            <button 
-              type="submit"
-              className="w-full bg-yellow-400 text-black py-6 rounded-[32px] font-black uppercase italic tracking-widest flex items-center justify-center gap-3 hover:bg-white transition-all shadow-2xl active:scale-95"
-            >
-              Згенерувати код для JSON
-            </button>
-          </div>
-        </form>
+                  <div className="space-y-4">
+                    <div>
+                      <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Посилання на фото</label>
+                      <input type="text" value={loc.image} onChange={(e) => updateLocation(loc.id, 'image', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold text-xs" />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Сайт/Посилання</label>
+                      <input type="text" value={loc.link} onChange={(e) => updateLocation(loc.id, 'link', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-bold text-xs" />
+                    </div>
+                    <div>
+                      <label className="text-[9px] font-black uppercase text-slate-500 mb-1 block tracking-widest">Опис</label>
+                      <textarea rows="2" value={loc.description} onChange={(e) => updateLocation(loc.id, 'description', e.target.value)} className="w-full bg-black/30 border border-white/10 p-3 rounded-xl outline-none focus:border-yellow-400 font-medium text-sm resize-none" />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* МОДАЛЬНЕ ВІКНО З ГОТОВИМ КОДОМ */}
-      {generatedJson && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-md">
-          <div className="bg-slate-900 border border-white/10 rounded-[40px] p-8 max-w-2xl w-full shadow-2xl relative">
-            <button onClick={() => setGeneratedJson(null)} className="absolute top-6 right-6 text-slate-500 hover:text-white">
-              <X size={24} />
+      {/* MODAL EXPORT */}
+      {showExport && (
+        <div className="fixed inset-0 z-[3000] flex items-center justify-center p-6 bg-slate-950/95 backdrop-blur-xl overflow-y-auto">
+          <div className="bg-slate-900 border border-white/10 rounded-[48px] p-8 md:p-12 max-w-4xl w-full shadow-2xl relative my-auto">
+            <button onClick={() => setShowExport(false)} className="absolute top-8 right-8 text-slate-500 hover:text-white p-2">
+              <X size={32} />
             </button>
-            <h2 className="text-xl font-black uppercase italic mb-4 text-yellow-400">Готово! Скопіюй цей блок:</h2>
-            <pre className="bg-black/50 p-6 rounded-2xl overflow-x-auto text-xs text-green-400 font-mono mb-6 border border-white/5">
-              {generatedJson}
-            </pre>
-            <button 
-              onClick={copyToClipboard}
-              className="w-full bg-white text-black py-4 rounded-2xl font-black uppercase flex items-center justify-center gap-2 hover:bg-yellow-400 transition-all"
-            >
-              <Clipboard size={20} /> Скопіювати код
-            </button>
+            <h2 className="text-3xl font-black uppercase italic mb-2 text-yellow-400 leading-none">Оновлений JSON код</h2>
+            <p className="text-slate-500 text-sm mb-8 font-bold uppercase tracking-widest">Скопіюй все нижче та заміни вміст locations.json</p>
+            
+            <div className="relative group">
+              <pre className="bg-black/60 p-8 rounded-[32px] overflow-auto max-h-[50vh] text-[10px] text-green-400 font-mono border border-white/5 scrollbar-thin scrollbar-thumb-white/10">
+                {JSON.stringify(locations, null, 2)}
+              </pre>
+              <button 
+                onClick={copyFullJson}
+                className="absolute top-4 right-4 bg-white/10 hover:bg-white hover:text-black text-white p-4 rounded-2xl transition-all flex items-center gap-2 font-black uppercase text-xs backdrop-blur-md"
+              >
+                <Clipboard size={18} /> Копіювати все
+              </button>
+            </div>
+
+            <div className="mt-8 p-6 bg-blue-500/10 border border-blue-500/20 rounded-3xl text-blue-300 text-xs font-bold leading-relaxed">
+              💡 Порада: Після копіювання відкрий файл <code className="text-white bg-white/10 px-1 rounded">public/locations.json</code>, видали все що там є, встав цей код і збережи файл.
+            </div>
           </div>
         </div>
       )}
+
+      <style jsx global>{`
+        .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 10px; }
+      `}</style>
     </div>
   );
 }
