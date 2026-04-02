@@ -119,7 +119,7 @@ export default function Home() {
             
             <div className="flex flex-col md:flex-row items-center gap-8 mb-12 relative z-10">
                <div className="w-32 h-32 bg-yellow-400 rounded-[40px] p-1.5 shadow-2xl shadow-yellow-400/20 flex items-center justify-center overflow-hidden shrink-0 animate-pulse-slow">
-                  <img src="/img/logo.png" className="w-full h-full object-cover rounded-[36px]" alt="Large Logo" />
+                  <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[36px]" alt="Large Logo" />
                </div>
                <div>
                   <span className="text-yellow-400 font-black uppercase italic tracking-[0.4em] text-xs">Про проект</span>
