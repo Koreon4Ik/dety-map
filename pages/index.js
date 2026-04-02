@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { Plus, Search, Settings } from 'lucide-react';
 
-// Динамічний імпорт мапи, щоб уникнути помилок SSR
+// Важливо: імпортуємо мапу динамічно, щоб не було помилок на сервері
 const MapCustom = dynamic(() => import('../components/Map'), { 
   ssr: false,
-  loading: () => <div className="h-full w-full bg-slate-900 animate-pulse" />
+  loading: () => <div className="h-screen w-full bg-slate-900 animate-pulse flex items-center justify-center text-slate-500 font-black italic uppercase">Завантаження мапи...</div>
 });
 
 export default function Home() {
@@ -13,18 +15,18 @@ export default function Home() {
   const [search, setSearch] = useState('');
 
   useEffect(() => {
-    // Функція завантаження твого локального JSON
-    const loadPoints = async () => {
+    const fetchData = async () => {
       try {
         const res = await fetch('/locations.json');
-        if (!res.ok) throw new Error('Файл не знайдено');
-        const jsonData = await res.json();
-        setData(jsonData);
+        if (res.ok) {
+          const jsonData = await res.json();
+          setData(jsonData);
+        }
       } catch (err) {
-        console.error("Помилка:", err);
+        console.error("Помилка завантаження точок:", err);
       }
     };
-    loadPoints();
+    fetchData();
   }, []);
 
   const filteredData = data.filter(item => {
@@ -34,23 +36,27 @@ export default function Home() {
   });
 
   return (
-    <div className="h-screen w-full bg-slate-950 relative overflow-hidden">
-      {/* Твій верхній бар з фільтрами та пошуком */}
-      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[1000] w-[90%] max-w-4xl">
-        <div className="bg-slate-900/80 backdrop-blur-md border border-white/10 p-2 rounded-3xl flex items-center gap-4 shadow-2xl">
-          <input 
-            type="text"
-            placeholder="Знайти простір..."
-            className="bg-transparent px-6 py-3 outline-none w-64 text-white font-medium"
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <div className="flex gap-2 overflow-x-auto no-scrollbar">
-            {['ВСІ', 'МЦ', 'NGO', 'Освіта', 'Коворкінг', 'Спорт'].map(cat => (
+    <div className="h-screen w-full bg-slate-950 relative overflow-hidden font-sans">
+      {/* ВЕРХНЯ ПАНЕЛЬ: ПОШУК ТА ФІЛЬТРИ */}
+      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-5xl">
+        <div className="bg-slate-900/90 backdrop-blur-xl border border-white/10 p-2 rounded-[32px] flex flex-wrap md:flex-nowrap items-center gap-3 shadow-2xl">
+          <div className="flex items-center gap-3 bg-white/5 rounded-2xl px-4 py-2 flex-grow">
+            <Search size={18} className="text-slate-500" />
+            <input 
+              type="text"
+              placeholder="Знайти простір..."
+              className="bg-transparent outline-none w-full text-white text-sm font-bold"
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+          
+          <div className="flex gap-1 overflow-x-auto no-scrollbar pb-1 md:pb-0">
+            {['ВСІ', 'МЦ', 'NGO', 'ОСВІТА', 'КОВОРКІНГ', 'ВОЛОНТЕРСТВО', 'СПОРТ', 'КУЛЬТУРА'].map(cat => (
               <button
                 key={cat}
                 onClick={() => setFilter(cat)}
-                className={`px-6 py-3 rounded-2xl text-xs font-black uppercase transition-all ${
-                  filter === cat ? 'bg-yellow-400 text-black' : 'bg-white/5 text-slate-400 hover:bg-white/10'
+                className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase transition-all whitespace-nowrap ${
+                  filter === cat ? 'bg-yellow-400 text-black shadow-lg shadow-yellow-400/20' : 'bg-white/5 text-slate-400 hover:bg-white/10'
                 }`}
               >
                 {cat}
@@ -60,8 +66,22 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Сама мапа */}
-      <MapCustom points={filteredData} />
+      {/* МАПА */}
+      <div className="h-full w-full">
+        <MapCustom points={filteredData} />
+      </div>
+
+      {/* КНОПКА ДОДАВАННЯ ТА АДМІНКА */}
+      <div className="absolute bottom-8 right-8 z-[1000] flex flex-col gap-4">
+        <Link href="/admin" className="bg-slate-900 border border-white/10 text-white p-4 rounded-2xl hover:bg-white hover:text-black transition-all shadow-xl group">
+          <Settings size={24} className="group-hover:rotate-90 transition-transform duration-500" />
+        </Link>
+        
+        {/* Тут посилання на твою форму (Tally/Google) або сторінку add */}
+        <Link href="https://tally.so/r/YOUR_FORM_ID" target="_blank" className="bg-yellow-400 text-black p-5 rounded-[24px] hover:bg-white transition-all shadow-2xl shadow-yellow-400/20 flex items-center justify-center">
+          <Plus size={32} strokeWidth={3} />
+        </Link>
+      </div>
     </div>
   );
 }
