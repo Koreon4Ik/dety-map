@@ -161,7 +161,7 @@ export default function Home() {
                     Це не просто мапа, а інструмент для кожного, хто хоче змінити пасивне споживання контенту на реальну дію.
                   </p>
                   <p className="text-slate-400 leading-relaxed font-medium">
-                    Наша місія — об’єднати всі «живі» локації міста в одну екосистему, щоб ти завжди знав відповідь на питання: 
+                    Наша місія — об’єднати всі «живі» локації України в одну екосистему, щоб ти завжди знав відповідь на питання: 
                     <span className="text-yellow-400 italic font-black ml-1 uppercase">Де ти сьогодні?</span>
                   </p>
                 </div>
@@ -175,7 +175,7 @@ export default function Home() {
                   <div className="grid grid-cols-1 gap-4">
                     {/* Кнопка Instagram */}
                     <a 
-                      href="https://instagram.com/твій_аккаунт" 
+                      href="https://www.instagram.com/child.youth.council/" 
                       target="_blank" 
                       className="group flex items-center justify-between p-5 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/5 rounded-3xl hover:border-pink-500/50 transition-all shadow-lg"
                     >
