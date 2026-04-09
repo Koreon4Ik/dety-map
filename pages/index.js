@@ -2,7 +2,10 @@ import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Plus, Search, Settings, Info, X, MapPin, Navigation } from 'lucide-react';
+import { 
+  Plus, Search, Settings, Info, X, MapPin, Navigation, 
+  Link as LinkIcon
+} from 'lucide-react';
 
 // Динамічний імпорт мапи
 const MapCustom = dynamic(() => import('../components/Map'), { 
@@ -115,23 +118,106 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT MODAL */}
+      {/* ABOUT MODAL - Оновлений та розширений */}
       {isAboutOpen && (
-        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-6 bg-slate-950/90 backdrop-blur-xl animate-fade-in">
-          <div className="bg-slate-900 border border-white/10 rounded-[56px] p-12 max-w-4xl w-full relative shadow-2xl overflow-hidden">
-            <button onClick={() => setIsAboutOpen(false)} className="absolute top-8 right-8 p-3.5 bg-white/5 rounded-full hover:bg-white/10 text-slate-400">
-              <X size={28} />
+        <div className="fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6 bg-slate-950/95 backdrop-blur-2xl animate-fade-in overflow-y-auto">
+          <div className="bg-slate-900/50 border border-white/10 rounded-[48px] md:rounded-[64px] p-8 md:p-14 max-w-5xl w-full relative shadow-2xl overflow-hidden my-auto">
+            
+            {/* Декоративний фон */}
+            <div className="absolute -top-24 -left-24 w-96 h-96 bg-yellow-400/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div className="absolute -bottom-24 -right-24 w-96 h-96 bg-blue-500/10 rounded-full blur-[120px] pointer-events-none"></div>
+
+            <button 
+              onClick={() => setIsAboutOpen(false)} 
+              className="absolute top-8 right-8 p-4 bg-white/5 rounded-full hover:bg-yellow-400 hover:text-black transition-all text-slate-400 z-20 group"
+            >
+              <X size={24} className="group-hover:rotate-90 transition-transform" />
             </button>
-            <div className="flex flex-col md:flex-row items-center gap-8 mb-12 relative z-10">
-               <div className="w-32 h-32 bg-yellow-400 rounded-[40px] p-1.5 flex items-center justify-center overflow-hidden shrink-0">
-                  <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[36px]" alt="Logo Large" />
-               </div>
-               <div>
-                  <h2 className="text-6xl font-black italic uppercase tracking-tighter text-white leading-none">DETY MAP</h2>
-                  <p className="text-slate-400 mt-2 flex items-center gap-2"><MapPin size={18} /> Карта активних просторів Дніпра</p>
-               </div>
+
+            <div className="relative z-10">
+              {/* Header */}
+              <div className="flex flex-col md:flex-row items-center gap-8 mb-12">
+                 <div className="w-32 h-32 bg-yellow-400 rounded-[40px] p-1 shadow-2xl shadow-yellow-400/20 shrink-0">
+                    <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[38px]" alt="DeTy Logo" />
+                 </div>
+                 <div className="text-center md:text-left">
+                    <h2 className="text-5xl md:text-7xl font-black italic uppercase tracking-tighter text-white leading-none">DeTy?</h2>
+                    <p className="text-yellow-400 font-black uppercase tracking-[0.3em] text-xs mt-3 flex items-center justify-center md:justify-start gap-2">
+                      <div className="h-1 w-8 bg-yellow-400"></div> Платформа можливостей
+                    </p>
+                 </div>
+              </div>
+
+              {/* Grid Content */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                
+                {/* Лева колонка: Про нас */}
+                <div className="space-y-6">
+                  <h3 className="text-xl font-black uppercase italic text-white flex items-center gap-3">
+                    <Info size={20} className="text-yellow-400" /> Про проєкт
+                  </h3>
+                  <p className="text-slate-400 leading-relaxed font-medium">
+                    Ми створили <span className="text-white font-bold">DeTy?</span> як відповідь на інформаційний вакуум. 
+                    Це не просто мапа, а інструмент для кожного, хто хоче змінити пасивне споживання контенту на реальну дію.
+                  </p>
+                  <p className="text-slate-400 leading-relaxed font-medium">
+                    Наша місія — об’єднати всі «живі» локації міста в одну екосистему, щоб ти завжди знав відповідь на питання: 
+                    <span className="text-yellow-400 italic font-black ml-1 uppercase">Де ти сьогодні?</span>
+                  </p>
+                </div>
+
+                {/* Права колонка: Екосистема та Соцмережі */}
+                <div className="space-y-8">
+                  <h3 className="text-xl font-black uppercase italic text-white flex items-center gap-3">
+                    <Settings size={20} className="text-yellow-400" /> Наша екосистема
+                  </h3>
+                  
+                  <div className="grid grid-cols-1 gap-4">
+                    {/* Кнопка Instagram */}
+                    <a 
+                      href="https://instagram.com/твій_аккаунт" 
+                      target="_blank" 
+                      className="group flex items-center justify-between p-5 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-white/5 rounded-3xl hover:border-pink-500/50 transition-all shadow-lg"
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-gradient-to-tr from-yellow-400 via-pink-500 to-purple-600 rounded-2xl text-white">
+                          <LinkIcon size={20} />
+                        </div>
+                        <div>
+                          <div className="text-white font-black uppercase text-xs tracking-widest">Instagram</div>
+                          <div className="text-slate-500 text-[10px] font-bold">Наші новини та івенти</div>
+                        </div>
+                      </div>
+                      <Plus size={18} className="text-slate-600 group-hover:text-white transition-colors" />
+                    </a>
+
+                    {/* Кнопка Telegram Bot (В розробці) */}
+                    <div className="group flex items-center justify-between p-5 bg-blue-600/10 border border-white/5 rounded-3xl opacity-80 relative overflow-hidden grayscale hover:grayscale-0 transition-all">
+                      <div className="flex items-center gap-4">
+                        <div className="p-3 bg-blue-500 rounded-2xl text-white">
+                          <Navigation size={20} />
+                        </div>
+                        <div>
+                          <div className="text-white font-black uppercase text-xs tracking-widest flex items-center gap-2">
+                            Telegram Bot <span className="text-[8px] bg-blue-500 px-1.5 py-0.5 rounded-full text-white">SOON</span>
+                          </div>
+                          <div className="text-slate-500 text-[10px] font-bold">Розумний помічник у кишені</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="p-6 bg-white/5 rounded-[32px] border border-white/5">
+                    <h4 className="text-[10px] font-black uppercase text-slate-500 mb-3 tracking-[0.2em]">Майбутні проєкти</h4>
+                    <div className="flex gap-3">
+                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">Wiki-DeTy</div>
+                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">DeTy Skills</div>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
             </div>
-            <p className="text-slate-300 text-xl leading-relaxed max-w-2xl relative z-10">Ми зібрали всі молодіжні хаби, коворкінги та NGO на одній платформі, щоб допомогти тобі знайти місце для розвитку.</p>
           </div>
         </div>
       )}
