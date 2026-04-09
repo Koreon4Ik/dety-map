@@ -3,7 +3,6 @@ import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Plus, Search, Settings, Info, X, MapPin, Navigation, Users, Link as LinkIcon } from 'lucide-react';
-} from 'lucide-react';
 
 // Динамічний імпорт мапи
 const MapCustom = dynamic(() => import('../components/Map'), { 
