@@ -210,8 +210,8 @@ export default function Home() {
                   <div className="p-6 bg-white/5 rounded-[32px] border border-white/5">
                     <h4 className="text-[10px] font-black uppercase text-slate-500 mb-3 tracking-[0.2em]">Майбутні проєкти</h4>
                     <div className="flex gap-3">
-                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">Wiki-DeTy</div>
-                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">DeTy Skills</div>
+                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">Reader</div>
+                      <div className="px-4 py-2 bg-slate-800 rounded-xl text-[10px] font-bold text-slate-400 uppercase tracking-wider italic">Donate-Dance</div>
                     </div>
                   </div>
                 </div>
