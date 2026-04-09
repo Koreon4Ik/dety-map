@@ -1,14 +1,69 @@
 [
   {
+    "id": 1775733275756,
+    "name": "Простір ідей",
+    "category": "КОВОРКІНГ",
+    "lat": 49.067397006199094,
+    "lng": 33.41389382967182,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTEZKQ6ZARfNSiAGYBKnit0aupRSYuY9gl5wA&s",
+    "description": "Креативний простір для розвитку культури, освіти та громадського активізму.",
+    "address": "вул. Соборна, 14, Кременчук",
+    "link": "https://prostir.org.ua/"
+  },
+  {
+    "id": 1775732961107,
+    "name": "Київський молодіжний центр",
+    "category": "МЦ",
+    "lat": 50.429848538083114,
+    "lng": 30.45594012684451,
+    "image": "https://znayshov.com/FR/7210/1.jpeg",
+    "description": "Простір для професійного розвитку, профорієнтації та підтримки молодіжних ініціатив столиці.",
+    "address": "вул. Чоколівський бульвар, 13, Київ",
+    "link": "https://www.kyc.kiev.ua/"
+  },
+  {
+    "id": 1775732852716,
+    "name": "Lviv Open Lab",
+    "category": "ОСВІТА",
+    "lat": 49.79378985235507,
+    "lng": 24.05326879508819,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBfGHrWmKNo5kV0i2dNMRxMahPbFXvT6RBHw&s",
+    "description": "Простір інноваційної освіти: біотехнологічна лабораторія, майстерня по дереву та робототехніка.",
+    "address": "просп. Червоної Калини, 58, Львів",
+    "link": "https://www.instagram.com/lviv.openlab/"
+  },
+  {
+    "id": 1775732727518,
+    "name": "Urban Space 100",
+    "category": "NGO",
+    "lat": 48.92189089179197,
+    "lng": 24.71396309472216,
+    "image": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/07/ba/fb/a6/urban-space-100.jpg?w=800&h=400&s=1",
+    "description": "Громадський ресторан, що фінансує соціальні проєкти міста. Центр тяжіння активістів Франківська.",
+    "address": "вул. Михайла Грушевського, 19, Івано-Франківськ",
+    "link": "https://www.urbanspace.if.ua/"
+  },
+  {
+    "id": 1775732595643,
+    "name": "Молодіжний центр Дніпра (МЦД)",
+    "category": "МЦ",
+    "lat": 48.45048185112957,
+    "lng": 35.08030027964246,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT6mNz866WLkfuah6O-Hbj2vd25NL7p_LqGQQ&s",
+    "description": "Головний хаб Дніпра для волонтерів та активної молоді. Постійні тренінги та заходи.",
+    "address": "вул. Набережна Перемоги, 5, Дніпро",
+    "link": "https://molod.dp.ua/mcd"
+  },
+  {
     "id": 1775731486082,
     "name": "Курси крою та шиття Buton School",
     "category": "ОСВІТА",
     "lat": 48.921132219234195,
     "lng": 24.713056911910975,
     "image": "https://eu-central-1.linodeobjects.com/list/production/256096/logo/big/673b24d73055c.png",
-    "description": "Навчимо шити та кроїти «з нуля»\n-Сучасні знання від фахівців;\n-Унікальна методика.\nВи будете вражені результатом!",
-    "address": "Вул. Л. Курбаса, 8; м. Івано-Франківськ, Івано-Франківська область ",
-    "link": "https://www.instagram.com/buton_school?igsh=c2dqb3k4NWFhaGJw"
+    "description": "Навчимо шити та кроїти «з нуля». Сучасні знання від фахівців.",
+    "address": "Вул. Л. Курбаса, 8; м. Івано-Франківськ",
+    "link": "https://www.instagram.com/buton_school"
   },
   {
     "id": 1775731383729,
@@ -17,20 +72,20 @@
     "lat": 48.89642253528795,
     "lng": 24.756680353690225,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQ5eVnXSRMOnCymNCy7kEPVTDFqzZ0YEXVBQ&s",
-    "description": "•Навчання верхової їзди з нуля\n•Оренда денників\n•Фотосесії\n•Кінно-спортивні змагання",
-    "address": "Вул. Юності, 57 ; м. Івано -Франківськ, Івано-Франківська обл.",
-    "link": "https://www.instagram.com/ksk_lider?igsh=OGs2Mmx6OHlmZWg="
+    "description": "Навчання верхової їзди, оренда денників, фотосесії та змагання.",
+    "address": "Вул. Юності, 57; м. Івано-Франківськ",
+    "link": "https://www.instagram.com/ksk_lider"
   },
   {
     "id": 1775731236030,
-    "name": "\"KOMA\"",
+    "name": "МЦ «KOMA»",
     "category": "МЦ",
     "lat": 48.50830847506941,
     "lng": 32.2573165964936,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcrn0k-0ekDKtCaxKSvb0_9ukKCv17peWnsA&s",
-    "description": "Молодіжний центр «Кома», створений за підтримки ЮНІСЕФ на базі обласного центру дитячої та юнацької творчості у Кропивницькому, — простір, дружній до будь-яких ініціатив молоді",
-    "address": "вулиця Шульгиних, 36, Кропивницький ",
-    "link": "https://www.instagram.com/koma_krop?igsh=bDZuaTlpbjlpbW41"
+    "description": "Молодіжний центр, створений за підтримки ЮНІСЕФ на базі ОЦДЮТ у Кропивницькому.",
+    "address": "вулиця Шульгиних, 36, Кропивницький",
+    "link": "https://www.instagram.com/koma_krop"
   },
   {
     "id": 1775731043649,
@@ -39,8 +94,118 @@
     "lat": 50.615780655178526,
     "lng": 26.27873088321197,
     "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT5sngmAVRubRONb6gK-8frItFynfQW1KGgjw&s",
-    "description": "🫂 Безбар'єрний простір молодіжних ініціатив\n🗓️ працюємо у всі дні, окрім Сб\n📍на базі @rivneyouthlibrary 📚",
-    "address": "вулиця Київська, 18, Рівне, Рівненська область",
+    "description": "Безбар'єрний простір молодіжних ініціатив на базі Рівненської обласної бібліотеки для молоді.",
+    "address": "вулиця Київська, 18, Рівне",
     "link": "https://linktr.ee/NOTA_YOUTH"
+  },
+  {
+    "id": 1775734000001,
+    "name": "Impact Hub Odessa",
+    "category": "NGO",
+    "lat": 46.4789542,
+    "lng": 30.7441121,
+    "image": "https://impacthub.odessa.ua/wp-content/uploads/2021/05/hub_building.jpg",
+    "description": "Епіцентр соціальних інновацій. Коворкінг, освітні програми та підтримка стартапів.",
+    "address": "вул. Грецька, 1А, Одеса",
+    "link": "https://impacthub.odessa.ua/"
+  },
+  {
+    "id": 1775734000002,
+    "name": "Молодіжний центр Волині",
+    "category": "МЦ",
+    "lat": 50.745585,
+    "lng": 25.325324,
+    "image": "https://lutskrada.gov.ua/images/news/2020/09/16/molodizhny-tsentr.jpg",
+    "description": "Хаб для молодіжних проєктів, волонтерства та неформальної освіти у центрі Луцька.",
+    "address": "вул. Градний Узвіз, 5, Луцьк",
+    "link": "https://www.facebook.com/youthcentervolyn/"
+  },
+  {
+    "id": 1775734000003,
+    "name": "Хаб «Місто змістів»",
+    "category": "NGO",
+    "lat": 49.233285,
+    "lng": 28.468241,
+    "image": "https://mistozmistiv.vn.ua/wp-content/uploads/2018/10/logo_mistozmistiv.png",
+    "description": "Платформа для взаємодії громадських організацій та міської влади Вінниці.",
+    "address": "вул. Магістратська, 11, Вінниця",
+    "link": "https://mistozmistiv.vn.ua/"
+  },
+  {
+    "id": 1775734000004,
+    "name": "Гончаренко Центр Кропивницький",
+    "category": "ОСВІТА",
+    "lat": 48.513254,
+    "lng": 32.262312,
+    "image": "https://goncharenkocentre.com.ua/storage/app/media/centres/kropyvnytskyi.jpg",
+    "description": "Безкоштовний освітній простір: вивчення мов, підготовка до іспитів та майстер-класи.",
+    "address": "вул. Велика Перспективна, 4А, Кропивницький",
+    "link": "https://goncharenkocentre.com.ua/centres/kropyvnytskyi"
+  },
+  {
+    "id": 1775734000005,
+    "name": "Молодіжна платформа Тернопіль",
+    "category": "NGO",
+    "lat": 49.553482,
+    "lng": 25.594123,
+    "image": "https://molodplat.org.ua/wp-content/uploads/2021/04/logo_main.png",
+    "description": "Центр розвитку молодіжного лідерства та тренінгів для молодіжних рад України.",
+    "address": "вул. Йосипа Сліпого, 3, Тернопіль",
+    "link": "https://molodplat.org.ua/"
+  },
+  {
+    "id": 1775734000006,
+    "name": "Розумний хаб (Sumy Smart Hub)",
+    "category": "КОВОРКІНГ",
+    "lat": 50.910624,
+    "lng": 34.802142,
+    "image": "https://smart.sumy.ua/images/logo.png",
+    "description": "Простір для громадських активістів, медіа-центр та коворкінг.",
+    "address": "вул. Кузнечна, 2, Суми",
+    "link": "https://www.facebook.com/smarthub.sumy/"
+  },
+  {
+    "id": 1775734000007,
+    "name": "Молодіжний хаб «Світогляд»",
+    "category": "МЦ",
+    "lat": 49.422894,
+    "lng": 26.987156,
+    "image": "https://khm.gov.ua/sites/default/files/news/images/2021/05/svitoglyad.jpg",
+    "description": "Муніципальний простір для інтелектуальних дебатів та молодіжних ініціатив Хмельницького.",
+    "address": "вул. Козацька, 2, Хмельницький",
+    "link": "https://www.instagram.com/svitoglyad_hub/"
+  },
+  {
+    "id": 1775734000008,
+    "name": "Re:Space Чернівці",
+    "category": "КОВОРКІНГ",
+    "lat": 48.291724,
+    "lng": 25.934412,
+    "image": "https://respace.cv.ua/img/logo.png",
+    "description": "Мультифункціональний коворкінг у серці Чернівців для фрілансерів та студентів.",
+    "address": "вул. Театральна, 22, Чернівці",
+    "link": "https://www.instagram.com/respace.cv/"
+  },
+  {
+    "id": 1775734000009,
+    "name": "Chernihiv IT Cluster Hub",
+    "category": "ОСВІТА",
+    "lat": 51.493895,
+    "lng": 31.303241,
+    "image": "https://it-cluster.cn.ua/wp-content/uploads/2020/09/hub-photo.jpg",
+    "description": "Центр розвитку технологічної освіти та нетворкінг для IT-молоді Чернігова.",
+    "address": "вул. П'ятницька, 39, Чернігів",
+    "link": "https://it-cluster.cn.ua/"
+  },
+  {
+    "id": 1775734000010,
+    "name": "Спортивний хаб «Епіцентр»",
+    "category": "СПОРТ",
+    "lat": 48.455231,
+    "lng": 35.061245,
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcReXnL6R-P5R_v_OaXm_V3XW_kQ0u5-y_2QZA&s",
+    "description": "Сучасний майданчик для професійних тренувань та спортивних секцій у Дніпрі.",
+    "address": "вул. Набережна Перемоги, 10, Дніпро",
+    "link": "https://epicentr.ua/sport/"
   }
 ]
