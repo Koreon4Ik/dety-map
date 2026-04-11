@@ -14,7 +14,7 @@ function MapController({ center }) {
   return null;
 }
 
-export default function Map({ points = [], onPointClick, center, zoom = 12 }) {
+export default function Map({ points = [], onPointClick, center, zoom = 12, isDark = true }) {
   
   // Кастомна іконка для локацій
   const createCustomIcon = (category) => {
@@ -29,14 +29,15 @@ export default function Map({ points = [], onPointClick, center, zoom = 12 }) {
       'ІНШЕ': '#94a3b8' 
     };
 
-    // Приведення категорії до верхнього регістру для пошуку кольору
     const color = colors[category?.toUpperCase()] || colors['ІНШЕ'];
+    // Обводка маркера змінюється залежно від теми
+    const borderColor = isDark ? '#0f172a' : '#ffffff';
 
     return L.divIcon({
       className: 'custom-marker',
-      html: `<div style="background: ${color}; width: 22px; height: 22px; border-radius: 50%; border: 3px solid #0f172a; box-shadow: 0 0 15px ${color}88;"></div>`,
-      iconSize: [22, 22],
-      iconAnchor: [11, 11]
+      html: `<div style="background: ${color}; width: 20px; height: 20px; border-radius: 50%; border: 3px solid ${borderColor}; box-shadow: 0 0 15px ${color}88;"></div>`,
+      iconSize: [20, 20],
+      iconAnchor: [10, 10]
     });
   };
 
@@ -48,19 +49,24 @@ export default function Map({ points = [], onPointClick, center, zoom = 12 }) {
     iconAnchor: [15, 15]
   });
 
+  // URL мапи залежно від теми
+  const tileUrl = isDark 
+    ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+    : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
+
   return (
-    <div className="h-full w-full bg-slate-950">
+    <div className={`h-full w-full ${isDark ? 'bg-slate-950' : 'bg-slate-100'} transition-colors duration-500`}>
       <MapContainer 
         center={[48.46, 35.04]} 
         zoom={zoom} 
         zoomControl={false} 
-        style={{ height: '100%', width: '100%', background: '#020617' }}
+        style={{ height: '100%', width: '100%', background: isDark ? '#020617' : '#f8fafc' }}
       >
         <MapController center={center} />
         
         <TileLayer 
-          url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          attribution='&copy; OSM'
+          url={tileUrl}
+          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
         />
 
         <ZoomControl position="bottomleft" />
@@ -78,7 +84,6 @@ export default function Map({ points = [], onPointClick, center, zoom = 12 }) {
               click: () => { if (onPointClick) onPointClick(loc); }
             }}
           >
-            {/* Підказка при наведенні */}
             <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
               <div className="p-1">
                 <div className="font-black uppercase italic text-[12px] text-slate-900 leading-tight">
@@ -94,13 +99,19 @@ export default function Map({ points = [], onPointClick, center, zoom = 12 }) {
       </MapContainer>
 
       <style jsx global>{`
-        .leaflet-container { background: #020617 !important; }
+        .leaflet-container { background: ${isDark ? '#020617' : '#f8fafc'} !important; transition: background 0.5s ease; }
         .leaflet-tooltip {
           background: white !important;
           border: none !important;
           border-radius: 12px !important;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.4) !important;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
           padding: 8px 12px !important;
+        }
+        /* Стилізація кнопок зуму для світлої/темної теми */
+        .leaflet-bar a {
+          background-color: ${isDark ? '#0f172a' : '#ffffff'} !important;
+          color: ${isDark ? '#ffffff' : '#0f172a'} !important;
+          border-bottom: 1px solid ${isDark ? '#1e293b' : '#e2e8f0'} !important;
         }
         .user-pulse-container { position: relative; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
         .user-dot { width: 12px; height: 12px; background: #3b82f6; border: 2px solid white; border-radius: 50%; z-index: 2; box-shadow: 0 0 10px #3b82f6; }
