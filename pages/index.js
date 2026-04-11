@@ -64,14 +64,15 @@ export default function Home() {
       <div className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-[1500px] flex flex-col gap-4">
         <div className="flex flex-col md:flex-row gap-3 md:gap-5 items-stretch md:items-center">
           
-          {/* LOGO BLOCK — ВИПРАВЛЕНО НА DeTy? */}
+          {/* LOGO BLOCK — ТЕПЕР ТОЧНО DeTy? */}
           <div className={`${theme.panel} backdrop-blur-2xl border p-3 pr-6 rounded-[32px] md:rounded-[40px] shadow-2xl flex items-center gap-4 shrink-0`}>
             <div className="w-14 h-14 md:w-16 md:h-16 rounded-[24px] md:rounded-[28px] overflow-hidden bg-yellow-400 p-0.5 shadow-lg shadow-yellow-400/20">
               <img src="/img/logo.PNG" alt="Logo" className="w-full h-full object-cover rounded-[22px] md:rounded-[26px]" />
             </div>
             <div className="flex flex-col">
-              {/* Ось тут змінено */}
-              <h1 className={`text-xl md:text-2xl font-black italic uppercase tracking-tighter leading-none ${theme.text}`}>DeTy?</h1>
+              <h1 className={`text-xl md:text-2xl font-black italic tracking-tighter leading-none ${theme.text}`}>
+                DeTy<span className="text-yellow-500">?</span>
+              </h1>
               <div className="flex items-center gap-3 mt-1">
                 <button onClick={() => setIsAboutOpen(true)} className="text-yellow-500 text-[10px] font-black uppercase tracking-widest hover:opacity-70 transition-all flex items-center gap-1.5">
                   <div className="h-1.5 w-1.5 rounded-full bg-yellow-500 animate-pulse"></div>
@@ -115,7 +116,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT MODAL — ТАКОЖ ВИПРАВЛЕНО НА DeTy? */}
+      {/* ABOUT MODAL — ТЕПЕР DeTy? ТУТ ТАКОЖ */}
       {isAboutOpen && (
         <div className={`fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6 ${isDark ? 'bg-slate-950/95' : 'bg-white/90'} backdrop-blur-2xl animate-fade-in overflow-y-auto`}>
           <div className={`${isDark ? 'bg-slate-900/50 border-white/10' : 'bg-white border-slate-200'} border rounded-[48px] p-8 md:p-12 max-w-5xl w-full relative shadow-2xl my-auto`}>
@@ -130,9 +131,10 @@ export default function Home() {
                     <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[26px]" alt="DeTy?" />
                   </div>
                   <div>
-                    {/* Ось тут змінено, text-white замінено на theme.text */}
-                    <h2 className={`text-4xl font-black italic uppercase tracking-tighter leading-none ${theme.text}`}>DeTy?</h2>
-                    <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Платформа можливостей</p>
+                    <h2 className={`text-4xl md:text-5xl font-black italic tracking-tighter leading-none ${theme.text}`}>
+                      DeTy<span className="text-yellow-500 font-black">?</span>
+                    </h2>
+                    <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2 text-nowrap">Платформа можливостей</p>
                   </div>
                 </div>
                 
@@ -141,7 +143,7 @@ export default function Home() {
                     <Info size={18} className="text-yellow-400" /> Про проєкт
                   </h3>
                   <p className={`${theme.subtext} text-sm leading-relaxed font-medium`}>
-                    Ми створили <span className={isDark ? 'text-white' : 'text-slate-900'}>DeTy?</span> як відповідь на інформаційний вакуум. Це інструмент для кожного, хто хоче змінити пасивне споживання на реальну дію.
+                    Ми створили <span className="font-bold">DeTy?</span> як відповідь на інформаційний вакуум. Це інструмент для кожного, хто хоче змінити пасивне споживання на реальну дію.
                   </p>
                 </div>
 
@@ -159,7 +161,7 @@ export default function Home() {
                 </h3>
                 
                 <div className="grid gap-3">
-                  <a href="https://www.instagram.com/child.youth.council/" target="_blank" className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-500/10 to-purple-600/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all">
+                  <a href="https://www.instagram.com/child.youth.council/" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-500/10 to-purple-600/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-gradient-to-tr from-yellow-400 to-pink-600 rounded-xl text-white"><LinkIcon size={16} /></div>
                       <span className="text-xs font-black uppercase tracking-widest">Instagram</span>
@@ -167,7 +169,7 @@ export default function Home() {
                     <Plus size={14} className="opacity-50" />
                   </a>
 
-                  <a href="https://t.me/childyouthcouncil_bot" target="_blank" className="flex items-center justify-between p-4 bg-blue-500/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all">
+                  <a href="https://t.me/childyouthcouncil_bot" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-blue-500/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all">
                     <div className="flex items-center gap-3">
                       <div className="p-2 bg-blue-500 rounded-xl text-white"><Navigation size={16} /></div>
                       <span className="text-xs font-black uppercase tracking-widest">Telegram Bot</span>
