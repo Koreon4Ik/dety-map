@@ -74,7 +74,6 @@ export default function Home() {
       {/* HEADER BLOCK */}
       <div className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-[1400px] flex flex-col md:flex-row gap-3">
         
-        {/* LOGO SECTION — FIXED CASE */}
         <div className={`${theme.panel} backdrop-blur-2xl border p-2.5 pr-6 rounded-[30px] shadow-2xl flex items-center gap-4 shrink-0`}>
           <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden bg-yellow-400 p-0.5 shadow-lg shadow-yellow-400/20">
             <img src="/img/logo.PNG" alt="Logo" className="w-full h-full object-cover rounded-[14px]" />
@@ -92,7 +91,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* SEARCH & FILTER SECTION */}
         <div className={`${theme.panel} backdrop-blur-2xl border p-2 rounded-[30px] flex flex-grow items-center gap-2 shadow-2xl`}>
           <div className={`flex items-center gap-3 ${theme.input} border rounded-2xl px-4 py-2.5 flex-grow focus-within:border-yellow-400/50 transition-all`}>
             <Search size={18} className="text-slate-500" />
@@ -104,7 +102,6 @@ export default function Home() {
             />
           </div>
 
-          {/* DROPDOWN */}
           <div className="relative" ref={dropdownRef}>
             <button 
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -136,7 +133,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT MODAL — FIXED CASE AND BOT LINK */}
+      {/* ABOUT MODAL */}
       {isAboutOpen && (
         <div className={`fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6 ${isDark ? 'bg-slate-950/95' : 'bg-white/90'} backdrop-blur-2xl animate-fade-in overflow-y-auto`}>
           <div className={`${isDark ? 'bg-slate-900/50 border-white/10' : 'bg-white border-slate-200'} border rounded-[48px] md:rounded-[64px] p-8 md:p-12 max-w-5xl w-full relative shadow-2xl my-auto`}>
@@ -155,6 +152,7 @@ export default function Home() {
                     <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[22px]" alt="DeTy?" />
                   </div>
                   <div>
+                    {/* ТУТ ВИПРАВЛЕНО РЕГІСТР DeTy */}
                     <h2 className={`text-4xl md:text-5xl font-black italic uppercase tracking-tighter leading-none ${theme.text}`}>DeTy<span className="text-yellow-500">?</span></h2>
                     <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Платформа можливостей</p>
                   </div>
@@ -200,7 +198,6 @@ export default function Home() {
                     <Plus size={14} className="opacity-50 group-hover:opacity-100 transition-opacity" />
                   </a>
 
-                  {/* UPDATED BOT LINK */}
                   <a href="https://t.me/UYouth_bot" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-blue-500/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all group">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-blue-500 rounded-xl text-white"><Navigation size={16} /></div>
@@ -220,14 +217,13 @@ export default function Home() {
                         <div key={proj} className="px-3 py-1.5 bg-slate-800 rounded-lg text-[9px] font-bold text-slate-400 uppercase tracking-wider italic">Wiki-{proj}</div>
                       ))}
                     </div>
-                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* MAP SECTION */}
       <div className="h-full w-full">
         <MapCustom 
           points={filteredData} 
@@ -237,7 +233,6 @@ export default function Home() {
         />
       </div>
 
-      {/* FLOATING ACTION BUTTONS */}
       <div className="absolute bottom-8 right-8 z-[1000] flex flex-col gap-4">
         <button onClick={findMe} className="bg-white text-black p-4 rounded-2xl shadow-2xl active:scale-90 transition-all hover:bg-slate-100">
           <Navigation size={22} fill="currentColor" />
@@ -247,7 +242,6 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* MOBILE BOTTOM NAV */}
       <div className={`md:hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-[1000] w-[90%] ${theme.panel} backdrop-blur-3xl border rounded-[32px] p-2 flex items-center justify-around shadow-2xl`}>
         <button onClick={findMe} className="p-4 text-slate-500 hover:text-yellow-500 transition-colors"><Navigation size={20} /></button>
         <Link href="/add" className="bg-yellow-400 text-black p-4 rounded-2xl shadow-lg -translate-y-4 border-4 border-slate-950 active:scale-90 transition-all"><Plus size={24} strokeWidth={3} /></Link>
