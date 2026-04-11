@@ -4,17 +4,17 @@ import { useEffect } from 'react';
 import 'leaflet/dist/leaflet.css';
 
 // Контролер руху камери
-function MapController({ center }) {
+function MapController({ center, zoom }) {
   const map = useMap();
   useEffect(() => {
     if (center) {
-      map.setView(center, 15, { animate: true, duration: 1.5 });
+      map.setView(center, zoom || map.getZoom(), { animate: true, duration: 1.5 });
     }
-  }, [center, map]);
+  }, [center, zoom, map]);
   return null;
 }
 
-export default function Map({ points = [], onPointClick, center, zoom = 12, isDark = true }) {
+export default function Map({ points = [], onPointClick, center, zoom, isDark = true }) {
   
   // Кастомна іконка для локацій
   const createCustomIcon = (category) => {
@@ -30,7 +30,6 @@ export default function Map({ points = [], onPointClick, center, zoom = 12, isDa
     };
 
     const color = colors[category?.toUpperCase()] || colors['ІНШЕ'];
-    // Обводка маркера змінюється залежно від теми
     const borderColor = isDark ? '#0f172a' : '#ffffff';
 
     return L.divIcon({
@@ -41,7 +40,7 @@ export default function Map({ points = [], onPointClick, center, zoom = 12, isDa
     });
   };
 
-  // Іконка для самого користувача
+  // Іконка користувача
   const userIcon = L.divIcon({
     className: 'user-marker',
     html: `<div class="user-pulse-container"><div class="user-pulse"></div><div class="user-dot"></div></div>`,
@@ -49,7 +48,6 @@ export default function Map({ points = [], onPointClick, center, zoom = 12, isDa
     iconAnchor: [15, 15]
   });
 
-  // URL мапи залежно від теми
   const tileUrl = isDark 
     ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
     : "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png";
@@ -57,24 +55,25 @@ export default function Map({ points = [], onPointClick, center, zoom = 12, isDa
   return (
     <div className={`h-full w-full ${isDark ? 'bg-slate-950' : 'bg-slate-100'} transition-colors duration-500`}>
       <MapContainer 
-        center={[48.46, 35.04]} 
+        center={center} 
         zoom={zoom} 
         zoomControl={false} 
         style={{ height: '100%', width: '100%', background: isDark ? '#020617' : '#f8fafc' }}
       >
-        <MapController center={center} />
+        <MapController center={center} zoom={zoom} />
         
         <TileLayer 
           url={tileUrl}
-          attribution='&copy; <a href="https://carto.com/">CARTO</a>'
+          attribution='&copy; OSM & CARTO'
         />
 
         <ZoomControl position="bottomleft" />
 
-        {/* Маркер користувача */}
-        {center && <Marker position={center} icon={userIcon} zIndexOffset={1000} />}
+        {/* Маркер користувача з'являється тільки якщо center не є дефолтним центром України */}
+        {center && center[1] !== 31.1656 && (
+          <Marker position={center} icon={userIcon} zIndexOffset={1000} />
+        )}
 
-        {/* Точки локацій */}
         {points.map((loc) => (
           <Marker 
             key={loc.id} 
@@ -99,19 +98,11 @@ export default function Map({ points = [], onPointClick, center, zoom = 12, isDa
       </MapContainer>
 
       <style jsx global>{`
-        .leaflet-container { background: ${isDark ? '#020617' : '#f8fafc'} !important; transition: background 0.5s ease; }
-        .leaflet-tooltip {
-          background: white !important;
-          border: none !important;
-          border-radius: 12px !important;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
-          padding: 8px 12px !important;
-        }
-        /* Стилізація кнопок зуму для світлої/темної теми */
+        .leaflet-container { background: ${isDark ? '#020617' : '#f8fafc'} !important; }
         .leaflet-bar a {
           background-color: ${isDark ? '#0f172a' : '#ffffff'} !important;
           color: ${isDark ? '#ffffff' : '#0f172a'} !important;
-          border-bottom: 1px solid ${isDark ? '#1e293b' : '#e2e8f0'} !important;
+          border: 1px solid ${isDark ? '#1e293b' : '#e2e8f0'} !important;
         }
         .user-pulse-container { position: relative; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; }
         .user-dot { width: 12px; height: 12px; background: #3b82f6; border: 2px solid white; border-radius: 50%; z-index: 2; box-shadow: 0 0 10px #3b82f6; }
