@@ -74,7 +74,7 @@ export default function Home() {
       {/* HEADER BLOCK */}
       <div className="absolute top-4 md:top-6 left-1/2 -translate-x-1/2 z-[1000] w-[95%] max-w-[1400px] flex flex-col md:flex-row gap-3">
         
-        {/* LOGO SECTION */}
+        {/* LOGO SECTION — FIXED CASE */}
         <div className={`${theme.panel} backdrop-blur-2xl border p-2.5 pr-6 rounded-[30px] shadow-2xl flex items-center gap-4 shrink-0`}>
           <div className="w-12 h-12 md:w-14 md:h-14 rounded-2xl overflow-hidden bg-yellow-400 p-0.5 shadow-lg shadow-yellow-400/20">
             <img src="/img/logo.PNG" alt="Logo" className="w-full h-full object-cover rounded-[14px]" />
@@ -136,7 +136,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* ABOUT MODAL — ПОВНИЙ КОНТЕНТ ПОВЕРНЕНО */}
+      {/* ABOUT MODAL — FIXED CASE AND BOT LINK */}
       {isAboutOpen && (
         <div className={`fixed inset-0 z-[2000] flex items-center justify-center p-4 md:p-6 ${isDark ? 'bg-slate-950/95' : 'bg-white/90'} backdrop-blur-2xl animate-fade-in overflow-y-auto`}>
           <div className={`${isDark ? 'bg-slate-900/50 border-white/10' : 'bg-white border-slate-200'} border rounded-[48px] md:rounded-[64px] p-8 md:p-12 max-w-5xl w-full relative shadow-2xl my-auto`}>
@@ -162,7 +162,7 @@ export default function Home() {
                 
                 <div className="space-y-4">
                   <h3 className="text-lg font-black uppercase italic text-white flex items-center gap-3">
-                    <Info size={18} className="text-yellow-400" /> Про проєкт
+                    <div className="p-2 bg-yellow-400/10 rounded-lg"><Info size={18} className="text-yellow-400" /></div> Про проєкт
                   </h3>
                   <div className={`space-y-4 ${theme.subtext} text-sm leading-relaxed font-medium`}>
                     <p>
@@ -185,7 +185,7 @@ export default function Home() {
 
               <div className="space-y-8">
                 <h3 className="text-lg font-black uppercase italic text-white flex items-center gap-3">
-                  <Settings size={18} className="text-yellow-400" /> Наша екосистема
+                  <div className="p-2 bg-yellow-400/10 rounded-lg"><Settings size={18} className="text-yellow-400" /></div> Наша екосистема
                 </h3>
                 
                 <div className="grid grid-cols-1 gap-3">
@@ -200,7 +200,8 @@ export default function Home() {
                     <Plus size={14} className="opacity-50 group-hover:opacity-100 transition-opacity" />
                   </a>
 
-                  <a href="https://t.me/childyouthcouncil_bot" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-blue-500/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all group">
+                  {/* UPDATED BOT LINK */}
+                  <a href="https://t.me/UYouth_bot" target="_blank" rel="noreferrer" className="flex items-center justify-between p-4 bg-blue-500/10 border border-white/5 rounded-2xl hover:scale-[1.02] transition-all group">
                     <div className="flex items-center gap-3">
                       <div className="p-2.5 bg-blue-500 rounded-xl text-white"><Navigation size={16} /></div>
                       <div>
