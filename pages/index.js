@@ -152,11 +152,14 @@ export default function Home() {
                     <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[22px]" alt="DeTy?" />
                   </div>
                   <div>
-                    {/* ТУТ ВИПРАВЛЕНО РЕГІСТР DeTy */}
-                    <h2 className={`text-4xl md:text-5xl font-black italic uppercase tracking-tighter leading-none ${theme.text}`}>DeTy<span className="text-yellow-500">?</span></h2>
-                    <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Платформа можливостей</p>
-                  </div>
-                </div>
+  {/* ВИДАЛЕНО uppercase ДЛЯ КОРЕКТНОГО ВІДОБРАЖЕННЯ РЕГІСТРУ */}
+  <h2 className={`text-4xl md:text-5xl font-black italic tracking-tighter leading-none ${theme.text}`}>
+    DeTy<span className="text-yellow-500">?</span>
+  </h2>
+  <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">
+    Платформа можливостей
+  </p>
+</div>
                 
                 <div className="space-y-4">
                   <h3 className="text-lg font-black uppercase italic text-white flex items-center gap-3">
