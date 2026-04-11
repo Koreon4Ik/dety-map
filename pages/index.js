@@ -13,6 +13,7 @@ const MapCustom = dynamic(() => import('../components/Map'), {
 });
 
 export default function Home() {
+  const router = useRouter();
   const UKRAINE_CENTER = [48.3794, 31.1656];
   const [data, setData] = useState([]);
   const [filter, setFilter] = useState('ВСІ');
@@ -152,13 +153,9 @@ export default function Home() {
                     <img src="/img/logo.PNG" className="w-full h-full object-cover rounded-[22px]" alt="DeTy?" />
                   </div>
                   <div>
-                    {/* ВИДАЛЕНО uppercase ДЛЯ КОРЕКТНОГО ВІДОБРАЖЕННЯ РЕГІСТРУ */}
-  <h2 className={`text-4xl md:text-5xl font-black italic tracking-tighter leading-none ${theme.text}`}>
-    DeTy<span className="text-yellow-500">?</span>
-  </h2>
-  <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">
-    Платформа можливостей
-  </p>
+                    {/* РЕГІСТР DeTy БЕЗ UPPERCASE */}
+                    <h2 className={`text-4xl md:text-5xl font-black italic tracking-tighter leading-none ${theme.text}`}>DeTy<span className="text-yellow-500">?</span></h2>
+                    <p className="text-yellow-500 font-bold uppercase tracking-[0.2em] text-[10px] mt-2">Платформа можливостей</p>
                   </div>
                 </div>
                 
@@ -228,12 +225,14 @@ export default function Home() {
         </div>
       )}
 
+      {/* MAP SECTION — ПОВЕРНУТО onPointClick ДЛЯ ПЕРЕХОДУ */}
       <div className="h-full w-full">
         <MapCustom 
           points={filteredData} 
           center={mapConfig.center} 
           zoom={mapConfig.zoom} 
           isDark={isDark} 
+          onPointClick={(loc) => router.push(`/location/${loc.id}`)}
         />
       </div>
 
